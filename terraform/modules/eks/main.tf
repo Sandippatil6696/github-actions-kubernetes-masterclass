@@ -33,7 +33,7 @@ module "eks" {
       most_recent              = true
       service_account_role_arn = module.ebs_csi_irsa.iam_role_arn
     }
-    
+
     metrics-server = {
       most_recent = true
     }
@@ -44,7 +44,7 @@ module "eks" {
   control_plane_subnet_ids = var.intra_subnets
 
   eks_managed_node_groups = {
-    skillpulse-ng = {
+    "${terraform.workspace}-skillpulse-ng" = {
       instance_types = [var.node_instance_type]
 
       desired_size = var.node_desired_count
@@ -53,7 +53,11 @@ module "eks" {
     }
   }
 
-  tags = var.tags
+  tags = {
+      Environment = terraform.workspace
+      NodeGroup   = "${terraform.workspace}-skillpulse"
+    }
+  
 }
 
 
@@ -74,6 +78,8 @@ module "ebs_csi_irsa" {
       ]
     }
   }
+
+  
 
   tags = var.tags
 }
