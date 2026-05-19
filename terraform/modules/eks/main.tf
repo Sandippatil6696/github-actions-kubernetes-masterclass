@@ -28,6 +28,15 @@ module "eks" {
       most_recent    = true
       before_compute = true
     }
+
+     aws-ebs-csi-driver = {
+      most_recent              = true
+      service_account_role_arn = module.ebs_csi_irsa.iam_role_arn
+    }
+    
+    metrics-server = {
+      most_recent = true
+    }
   }
 
   vpc_id                   = var.vpc_id
