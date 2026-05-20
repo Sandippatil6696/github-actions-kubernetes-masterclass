@@ -22,3 +22,8 @@ variable "aws_region" {
   type = string
   default = "us-west-2"
 }
+
+variable "cert_manager_version" {
+  type    = string
+  default = "v1.18.2"
+}

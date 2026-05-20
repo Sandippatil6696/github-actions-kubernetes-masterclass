@@ -39,9 +39,35 @@ module "eks" {
 
 module "argocd" {
   source = "./modules/argocd"
-
   namespace    = "argocd"
   service_type = "LoadBalancer"
-
   eks_dependency = module.eks
+}
+
+
+module "envoy_gateway" {
+
+  source = "./modules/envoy-gateway"
+
+  release_name = "eg-${local.env}"
+
+  namespace = "envoy-gateway-system"
+
+  gateway_api_version   = "v1.2.1"
+  envoy_gateway_version = "v1.2.6"
+
+  depends_on = module.eks
+}
+
+module "cert_manager" {
+  source = "./modules/cert-manager"
+  release_name = "cert-manager"
+  namespace    = "cert-manager"
+  chart_version = var.cert_manager_version
+}
+
+module "monitoring" {
+  source = "./modules/monitoring"
+  namespace            = "monitoring"
+  grafana_service_type = "LoadBalancer"
 }
