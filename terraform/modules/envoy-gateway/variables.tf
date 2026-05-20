@@ -28,6 +28,3 @@ variable "envoy_gateway_version" {
   default = "v1.2.6"
 }
 
-variable "depends_on" {
-  type = any
-}

@@ -56,7 +56,7 @@ module "envoy_gateway" {
   gateway_api_version   = "v1.2.1"
   envoy_gateway_version = "v1.2.6"
 
-  depends_on = module.eks
+  depends_on = [module.eks]
 }
 
 module "cert_manager" {
@@ -64,10 +64,12 @@ module "cert_manager" {
   release_name = "cert-manager"
   namespace    = "cert-manager"
   chart_version = var.cert_manager_version
+  depends_on = [module.eks]
 }
 
 module "monitoring" {
   source = "./modules/monitoring"
   namespace            = "monitoring"
   grafana_service_type = "LoadBalancer"
+  depends_on = [module.eks]
 }
