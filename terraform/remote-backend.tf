@@ -11,9 +11,10 @@ resource "aws_s3_bucket" "remote-s3-bucket" {
 # dynamodb table
 
 resource "aws_dynamodb_table" "remote-dynamodb-table" {
-  name           = "rmt-backend-bucket-tbl"
+  name           = "rmt-backend-bucket-skillpulse-tbl"
   billing_mode   = "PAY_PER_REQUEST"
   hash_key       = "LockID"
+
 
   attribute {
     name = "LockID"
