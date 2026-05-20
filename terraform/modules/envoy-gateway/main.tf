@@ -20,7 +20,6 @@ EOT
     gateway_api_version = var.gateway_api_version
   }
 
-  depends_on = [var.depends_on]
 }
 
 #############################################
