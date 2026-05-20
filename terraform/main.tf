@@ -52,7 +52,7 @@ module "envoy_gateway" {
   release_name = "eg-${local.env}"
 
   namespace = "envoy-gateway-system"
-
+  service_type = "LoadBalancer"
   gateway_api_version   = "v1.2.1"
   envoy_gateway_version = "v1.2.6"
   cluster_name = local.cluster_name

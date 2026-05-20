@@ -47,7 +47,22 @@ output "configure_kubectl" {
   value       = "aws eks update-kubeconfig --name ${module.eks.cluster_name} --region ${var.aws_region}"
 }
 
+output "argocd_url" {
+  description = "Command to get ArgoCD url"
+  value       = "kubectl get svc argocd-server -n argocd -o jsonpath='{.status.loadBalancer.ingress[0].hostname}'"
+}
+
 output "argocd_initial_password" {
   description = "Command to get ArgoCD initial admin password"
   value       = "kubectl get secret argocd-initial-admin-secret -n argocd -o jsonpath='{.data.password}' | base64 -d"
+}
+
+output "grafana_url" {
+  description = "Command to Grafana URL"
+  value       = "kubectl get svc kube-prometheus-grafana -n monitoring -o jsonpath='{.status.loadBalancer.ingress[0].hostname}'"
+}
+
+output "grafana_initial_passowrd" {
+  description = "Command to get Grafana initial admin password"
+  value       = "kubectl get secret kube-prometheus-grafana -n monitoring -o jsonpath='{.data.admin-password}' | base64 -d; echo"
 }
