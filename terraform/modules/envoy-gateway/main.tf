@@ -1,5 +1,3 @@
-
-
 #############################################
 # Gateway API CRDs
 #############################################
@@ -11,8 +9,11 @@ resource "null_resource" "gateway_api_crds" {
     interpreter = ["/bin/bash", "-c"]
 
     command = <<EOT
-kubectl apply --server-side \
--f https://github.com/kubernetes-sigs/gateway-api/releases/download/${var.gateway_api_version}/standard-install.yaml
+
+    aws eks update-kubeconfig --name ${var.cluster_name} --region ${var.aws_region}
+
+    kubectl apply --server-side \
+    -f https://github.com/kubernetes-sigs/gateway-api/releases/download/${var.gateway_api_version}/standard-install.yaml
 EOT
   }
 
