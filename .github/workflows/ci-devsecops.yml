@@ -1,1 +1,17 @@
-name: 
+name: DevSecOps CI
+
+# on:
+#   push:
+#     branches: [feat-gitops]
+#     paths-ignore:
+#       - 'k8s/**'
+#       - 'docs/**'
+#       - '**/*.md'
+
+  workflow_dispatch:
+
+jobs:
+    code-scan:
+        uses: ./.github/workflows/code-scan.yml
+
+    
