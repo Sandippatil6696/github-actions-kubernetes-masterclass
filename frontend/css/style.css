@@ -6,30 +6,21 @@
     --warning: #f59e0b;
     --danger: #ef4444;
     --bg: #f8fafc;
-
     --surface: rgb(255 255 255 / 60%);
     --surface-solid: #fff;
-
     --text: #1e293b;
     --text-muted: #64748b;
     --border: #e2e8f0;
-
     --radius: 12px;
-
     --shadow:
         0 1px 3px rgb(0 0 0 / 10%),
         0 1px 2px rgb(0 0 0 / 6%);
-
     --shadow-lg:
         0 10px 15px rgb(0 0 0 / 10%),
         0 4px 6px rgb(0 0 0 / 5%);
-
     --glass-blur: 12px;
-
     --glass-border: 1px solid rgb(255 255 255 / 30%);
-
     --glass-shadow: 0 8px 32px rgb(0 0 0 / 8%);
-
     --theme-transition:
         background 0.3s ease,
         color 0.3s ease,
@@ -40,24 +31,18 @@
 
 [data-theme="dark"] {
     --bg: #0f172a;
-
     --surface: rgb(30 41 59 / 60%);
     --surface-solid: #1e293b;
-
     --text: #e2e8f0;
     --text-muted: #94a3b8;
     --border: #334155;
-
     --shadow:
         0 1px 3px rgb(0 0 0 / 30%),
         0 1px 2px rgb(0 0 0 / 20%);
-
     --shadow-lg:
         0 10px 15px rgb(0 0 0 / 30%),
         0 4px 6px rgb(0 0 0 / 20%);
-
     --glass-border: 1px solid rgb(255 255 255 / 8%);
-
     --glass-shadow: 0 8px 32px rgb(0 0 0 / 30%);
 }
 
@@ -74,7 +59,6 @@ body {
         "Segoe UI",
         Roboto,
         sans-serif;
-
     background: var(--bg);
     color: var(--text);
     line-height: 1.6;
@@ -89,13 +73,10 @@ body {
             rgb(79 70 229 / 85%),
             rgb(55 48 163 / 90%)
         );
-
     backdrop-filter: blur(var(--glass-blur));
-
     color: #fff;
     padding: 1.5rem 2rem;
     box-shadow: var(--shadow-lg);
-
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -122,28 +103,19 @@ body {
 .theme-toggle {
     width: 40px;
     height: 40px;
-
     border-radius: 50%;
-
     border: 1px solid rgb(255 255 255 / 30%);
-
     background: rgb(255 255 255 / 15%);
-
     backdrop-filter: blur(8px);
-
     color: #fff;
-
     font-size: 1.2rem;
     cursor: pointer;
-
     display: flex;
     align-items: center;
     justify-content: center;
-
     transition:
         background 0.2s ease,
         transform 0.2s ease;
-
     flex-shrink: 0;
 }
 
@@ -169,17 +141,11 @@ body {
 
 .stat-card {
     background: var(--surface);
-
     backdrop-filter: blur(var(--glass-blur));
-
     border-radius: var(--radius);
-
     padding: 1.25rem;
-
     border: var(--glass-border);
-
     box-shadow: var(--glass-shadow);
-
     transition: var(--theme-transition);
 }
 
@@ -226,17 +192,12 @@ body {
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
-
     padding: 0.5rem 1rem;
-
     border: none;
     border-radius: 8px;
-
     font-size: 0.875rem;
     font-weight: 500;
-
     cursor: pointer;
-
     transition: all 0.15s ease;
 }
 
@@ -282,17 +243,11 @@ body {
 
 .skill-card {
     background: var(--surface);
-
     backdrop-filter: blur(var(--glass-blur));
-
     border-radius: var(--radius);
-
     padding: 1.25rem;
-
     border: var(--glass-border);
-
     box-shadow: var(--glass-shadow);
-
     transition:
         var(--theme-transition),
         transform 0.2s ease;
@@ -306,21 +261,14 @@ body {
 /* Modal */
 .modal-backdrop {
     display: none;
-
     position: fixed;
-
     top: 0;
     left: 0;
-
     width: 100%;
     height: 100%;
-
     background: rgb(0 0 0 / 50%);
-
     backdrop-filter: blur(4px);
-
     z-index: 100;
-
     justify-content: center;
     align-items: center;
 }
@@ -331,20 +279,13 @@ body {
 
 .modal {
     background: var(--surface);
-
     backdrop-filter: blur(var(--glass-blur));
-
     border: var(--glass-border);
-
     border-radius: var(--radius);
-
     padding: 2rem;
-
     width: 90%;
     max-width: 450px;
-
     box-shadow: var(--glass-shadow);
-
     transition: var(--theme-transition);
 }
 
@@ -353,7 +294,6 @@ body {
 .form-group textarea:focus,
 .form-group select:focus {
     border-color: var(--primary);
-
     box-shadow: 0 0 0 3px rgb(79 70 229 / 15%);
 }
 
