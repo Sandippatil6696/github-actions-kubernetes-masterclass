@@ -142,7 +142,7 @@ jobs:
                 "no-trailing-spaces":    "warn",
                 "semi":                 ["error", "always"],
                 "quotes":               ["warn", "double", { avoidEscape: true }],
-              };' > eslint.config.js
+              }' > eslint.config.js
               
             npx eslint "**/*.js" --no-config-lookup --config eslint.config.js
             rm eslint.config.js
