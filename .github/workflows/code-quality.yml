@@ -130,6 +130,9 @@ jobs:
             module.exports = [
               js.configs.recommended,
               {
+                ignores: ["eslint.config.js", "*.min.js", "vendor/**", "dist/**"],
+              },
+              {
                 languageOptions: {
                   ecmaVersion: 2022,
                   sourceType: "script",
@@ -144,25 +147,22 @@ jobs:
                   },
                 },
                 rules: {
-                  "no-undef":               "error",
-                  "no-unused-vars":         ["warn", { argsIgnorePattern: "^_", caughtErrorsIgnorePattern: "^_" }],
-                  "no-var":                 "error",
-                  "eqeqeq":                ["error", "always"],
-                  "no-eval":                "error",
-                  "no-implied-eval":        "error",
-                  "prefer-const":           "warn",
-                  "semi":                  ["error", "always"],
-                  "no-console":             "warn",
-                  "no-debugger":            "error",
-                  "curly":                 ["error", "all"],
-                  "no-multiple-empty-lines":["warn", { max: 2 }],
-                  "no-trailing-spaces":     "warn",
+                  "no-undef":                "error",
+                  "no-unused-vars":          ["warn", { argsIgnorePattern: "^_", caughtErrorsIgnorePattern: "^_" }],
+                  "no-var":                  "error",
+                  "eqeqeq":                 ["error", "always"],
+                  "no-eval":                 "error",
+                  "no-implied-eval":         "error",
+                  "prefer-const":            "warn",
+                  "semi":                   ["error", "always"],
+                  "no-console":              "warn",
+                  "no-debugger":             "error",
+                  "curly":                  ["error", "all"],
+                  "no-multiple-empty-lines": ["warn", { max: 2 }],
+                  "no-trailing-spaces":      "warn",
                 },
-              },
-              {
-                ignores: ["*.min.js", "vendor/**", "dist/**"],
               },
             ];
             EOF
-            npx eslint "**/*.js" --no-config-lookup --config eslint.config.js
+            npx eslint "/**/*.js" --no-config-lookup --config eslint.config.js
             rm eslint.config.js
