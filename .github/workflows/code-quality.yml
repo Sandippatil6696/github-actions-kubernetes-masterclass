@@ -9,12 +9,13 @@ on:
           - '**/*.md'
     workflow_dispatch:
 
-defaults:
-      run:
-        working-directory: backend
+
 jobs:
   validate-backend-code:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
     steps:
         - name: checkout code 
           uses: actions/checkout@v4
@@ -34,4 +35,22 @@ jobs:
 
         - name: run go lint
           run: golangci-lint run ./...
-          
+
+  validate-frontend-code:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+        - name: checkout code 
+          uses: actions/checkout@v4
+          with:
+            fetch-depth: 0
+
+        - name: Run Super-Linter
+          uses: super-linter/super-linter@v5
+          env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            VALIDATE_HTML: true
+            VALIDATE_CSS: true
+            VALIDATE_JAVASCRIPT_ES: true
