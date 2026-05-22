@@ -123,46 +123,46 @@ jobs:
 
         # 3. Lint JavaScript files
         - name: Lint JS
-          run: |
-            cat > eslint.config.js <<'EOF'
-            import js from "@eslint/js";
+  run: |
+    cat > eslint.config.js <<'EOF'
+    const js = require("@eslint/js");
 
-            export default [
-              js.configs.recommended,
-              {
-                languageOptions: {
-                  ecmaVersion: 2022,
-                  sourceType: "script",
-                  globals: {
-                    window:       "readonly",
-                    document:     "readonly",
-                    localStorage: "readonly",
-                    fetch:        "readonly",
-                    confirm:      "readonly",
-                    setTimeout:   "readonly",
-                    console:      "readonly",
-                  },
-                },
-                rules: {
-                  "no-undef":              "error",
-                  "no-unused-vars":        ["warn",  { argsIgnorePattern: "^_" }],
-                  "no-var":                "error",
-                  "eqeqeq":               ["error", "always"],
-                  "no-eval":               "error",
-                  "no-implied-eval":       "error",
-                  "prefer-const":          "warn",
-                  "semi":                 ["error", "always"],
-                  "no-console":            "warn",
-                  "no-debugger":           "error",
-                  "curly":                ["error", "all"],
-                  "no-multiple-empty-lines":["warn", { max: 2 }],
-                  "no-trailing-spaces":    "warn",
-                },
-              },
-              {
-                ignores: ["*.min.js", "vendor/**", "dist/**"],
-              },
-            ];
-            EOF
-            npx eslint "**/*.js" --no-config-lookup --config eslint.config.js
-            rm eslint.config.js
+    module.exports = [
+      js.configs.recommended,
+      {
+        languageOptions: {
+          ecmaVersion: 2022,
+          sourceType: "script",
+          globals: {
+            window:       "readonly",
+            document:     "readonly",
+            localStorage: "readonly",
+            fetch:        "readonly",
+            confirm:      "readonly",
+            setTimeout:   "readonly",
+            console:      "readonly",
+          },
+        },
+        rules: {
+          "no-undef":               "error",
+          "no-unused-vars":         ["warn", { argsIgnorePattern: "^_", caughtErrorsIgnorePattern: "^_" }],
+          "no-var":                 "error",
+          "eqeqeq":                ["error", "always"],
+          "no-eval":                "error",
+          "no-implied-eval":        "error",
+          "prefer-const":           "warn",
+          "semi":                  ["error", "always"],
+          "no-console":             "warn",
+          "no-debugger":            "error",
+          "curly":                 ["error", "all"],
+          "no-multiple-empty-lines":["warn", { max: 2 }],
+          "no-trailing-spaces":     "warn",
+        },
+      },
+      {
+        ignores: ["*.min.js", "vendor/**", "dist/**"],
+      },
+    ];
+    EOF
+    npx eslint "**/*.js" --no-config-lookup --config eslint.config.js
+    rm eslint.config.js
