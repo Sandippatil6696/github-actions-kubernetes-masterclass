@@ -164,5 +164,5 @@ jobs:
               },
             ];
             EOF
-            npx eslint "/**/*.js" --no-config-lookup --config eslint.config.js
+            npx eslint "js/**/*.js" --no-config-lookup --config eslint.config.js
             rm eslint.config.js
