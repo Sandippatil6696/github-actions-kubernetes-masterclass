@@ -3,7 +3,7 @@ const API = '/api';
 // Theme Management
 function getPreferredTheme() {
     const stored = localStorage.getItem('skillpulse-theme');
-    if (stored) return stored;
+    if (stored) { return stored; }
     return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
 }
 
@@ -11,7 +11,7 @@ function applyTheme(theme) {
     document.documentElement.setAttribute('data-theme', theme);
     localStorage.setItem('skillpulse-theme', theme);
     const btn = document.getElementById('theme-toggle');
-    if (btn) btn.textContent = theme === 'dark' ? '\u2600\uFE0F' : '\uD83C\uDF19';
+    if (btn) { btn.textContent = theme === 'dark' ? '\u2600\uFE0F' : '\uD83C\uDF19'; }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -56,8 +56,9 @@ async function loadDashboard() {
         const res = await fetch(`${API}/dashboard`);
         dashboard = await res.json();
         renderStats();
-    } catch (err) {
-        console.error('Failed to load dashboard:', err);
+    } catch (_err) {
+        // eslint-disable-next-line no-console
+        console.error('Failed to load dashboard:', _err);
     }
 }
 
@@ -66,8 +67,9 @@ async function loadSkills() {
         const res = await fetch(`${API}/skills`);
         skills = await res.json();
         renderSkills();
-    } catch (err) {
-        console.error('Failed to load skills:', err);
+    } catch (_err) {
+        // eslint-disable-next-line no-console
+        console.error('Failed to load skills:', _err);
     }
 }
 
@@ -77,13 +79,13 @@ async function createSkill(data) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data),
     });
-    if (!res.ok) throw new Error('Failed to create skill');
+    if (!res.ok) { throw new Error('Failed to create skill'); }
     return res.json();
 }
 
 async function deleteSkill(id) {
     const res = await fetch(`${API}/skills/${id}`, { method: 'DELETE' });
-    if (!res.ok) throw new Error('Failed to delete skill');
+    if (!res.ok) { throw new Error('Failed to delete skill'); }
     return res.json();
 }
 
@@ -93,7 +95,7 @@ async function logSession(skillId, data) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data),
     });
-    if (!res.ok) throw new Error('Failed to log session');
+    if (!res.ok) { throw new Error('Failed to log session'); }
     return res.json();
 }
 
@@ -162,6 +164,7 @@ function renderSkills() {
 }
 
 // Modal Handlers
+/* eslint-disable no-unused-vars */
 function openAddModal() {
     addSkillForm.reset();
     addSkillModal.classList.add('active');
@@ -170,9 +173,11 @@ function openAddModal() {
 function closeAddModal() {
     addSkillModal.classList.remove('active');
 }
+/* eslint-enable no-unused-vars */
 
 let currentLogSkillId = null;
 
+/* eslint-disable no-unused-vars */
 function openLogModal(skillId, skillName) {
     currentLogSkillId = skillId;
     document.getElementById('log-skill-name').textContent = skillName;
@@ -186,6 +191,7 @@ function closeLogModal() {
     logSessionModal.classList.remove('active');
     currentLogSkillId = null;
 }
+/* eslint-enable no-unused-vars */
 
 // Form Handlers
 addSkillForm.addEventListener('submit', async (e) => {
@@ -200,7 +206,7 @@ addSkillForm.addEventListener('submit', async (e) => {
         showToast('Skill added!', 'success');
         loadDashboard();
         loadSkills();
-    } catch (err) {
+    } catch (_err) {
         showToast('Failed to add skill', 'error');
     }
 });
@@ -217,22 +223,24 @@ logSessionForm.addEventListener('submit', async (e) => {
         showToast('Session logged!', 'success');
         loadDashboard();
         loadSkills();
-    } catch (err) {
+    } catch (_err) {
         showToast('Failed to log session', 'error');
     }
 });
 
+/* eslint-disable no-unused-vars */
 async function handleDelete(id) {
-    if (!confirm('Delete this skill and all its logs?')) return;
+    if (!confirm('Delete this skill and all its logs?')) { return; }
     try {
         await deleteSkill(id);
         showToast('Skill deleted', 'success');
         loadDashboard();
         loadSkills();
-    } catch (err) {
+    } catch (_err) {
         showToast('Failed to delete skill', 'error');
     }
 }
+/* eslint-enable no-unused-vars */
 
 // Utilities
 function escapeHtml(str) {

@@ -1,0 +1,189 @@
+name: Code-Quality
+
+on:
+    push:
+        branches: [feat-gitops]
+        paths-ignore:
+          - 'k8s/**'
+          - 'docs/**'
+          - '**/*.md'
+    workflow_dispatch:
+
+
+jobs:
+  validate-backend-code:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+        - name: checkout code 
+          uses: actions/checkout@v4
+
+        - name: setup go 
+          uses: actions/setup-go@v5
+          with:
+            go-version: 1.26.3
+            cache: true 
+            cache-dependency-path: backend/go.sum
+
+        # Cache golangci-lint binary so it is not re-downloaded every run
+        - name: Cache golangci-lint binary
+          id: cache-golangci-lint
+          uses: actions/cache@v4
+          with:
+            path: ~/.golangci-lint
+            key: golangci-lint-v2.9.0
+
+        - name: Install golangci-lint from binary
+          if: steps.cache-golangci-lint.outputs.cache-hit != 'true'
+          run: |
+            curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b ~/.golangci-lint v2.9.0
+        
+        - name: Add golangci-lint to PATH
+          run: echo "$HOME/.golangci-lint" >> "$GITHUB_PATH"
+          
+        - name: install dependencies
+          run: go mod tidy
+
+        - name: run go lint
+          run: golangci-lint run ./...
+
+  validate-frontend-code:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+        - name: checkout code 
+          uses: actions/checkout@v4
+          with:
+            fetch-depth: 0
+
+        - name: Setup Node.js
+          uses: actions/setup-node@v4
+          with:
+            node-version: 22
+          
+        - name: Cache node_modules
+          id: cache-node-modules
+          uses: actions/cache@v4
+          with:
+            path: frontend/node_modules
+            key: node-modules-${{ runner.os }}-${{ hashFiles('frontend/go.sum') }}
+            restore-keys: |
+              node-modules-${{ runner.os }}-
+          
+        - name: Install Lint Tools
+          run: |
+            npm install --save-dev \
+            eslint \
+            @eslint/js \
+            stylelint \
+            stylelint-config-standard \
+            htmlhint
+              
+         # 1. Lint HTML files
+        
+        - name: Lint HTML
+          run: |
+            cat > .htmlhintrc.json <<'EOF'
+            {
+              "tagname-lowercase":        true,
+              "attr-lowercase":           true,
+              "attr-value-double-quotes": true,
+              "attr-no-duplication":      true,
+              "doctype-first":            true,
+              "tag-pair":                 true,
+              "tag-self-close":           false,
+              "spec-char-escape":         true,
+              "id-unique":                true,
+              "src-not-empty":            true,
+              "alt-require":              true,
+              "title-require":            true,
+              "head-script-disabled":     false,
+              "style-disabled":           false,
+              "inline-style-disabled":    false,
+              "space-tab-mixed-disabled": "space",
+              "id-class-ad-disabled":     false,
+              "href-abs-or-rel":          false,
+              "attr-unsafe-chars":        true,
+              "doctype-html5":            true
+            }
+            EOF
+            npx htmlhint "**/*.html" --config .htmlhintrc.json
+            rm .htmlhintrc.json
+
+        # 2. Lint CSS files
+        - name: Lint CSS
+          run: |
+            cat > .stylelintrc.json <<'EOF'
+            {
+              "extends": ["stylelint-config-standard"],
+              "rules": {
+                "color-no-invalid-hex":                              true,
+                "unit-no-unknown":                                   true,
+                "property-no-unknown":                               true,
+                "declaration-block-no-duplicate-properties":         true,
+                "declaration-block-no-shorthand-property-overrides": true,
+                "selector-pseudo-class-no-unknown":                  true,
+                "selector-pseudo-element-no-unknown":                true,
+                "no-duplicate-at-import-rules":                      true,
+                "no-duplicate-selectors":                            true,
+                "no-empty-source":                                   true,
+                "shorthand-property-no-redundant-values":            true,
+                "declaration-block-single-line-max-declarations":    1,
+                "max-nesting-depth":                                 3,
+                "selector-max-id":                                   1,
+                "comment-no-empty":                                  true
+              }
+            }
+            EOF
+            npx stylelint "**/*.css" --config .stylelintrc.json
+            rm .stylelintrc.json
+
+        # 3. Lint JavaScript files
+        - name: Lint JS
+          run: |
+            cat > eslint.config.js <<'EOF'
+            const js = require("@eslint/js");
+
+            module.exports = [
+              js.configs.recommended,
+              {
+                ignores: ["eslint.config.js", "*.min.js", "vendor/**", "dist/**"],
+              },
+              {
+                languageOptions: {
+                  ecmaVersion: 2022,
+                  sourceType: "script",
+                  globals: {
+                    window:       "readonly",
+                    document:     "readonly",
+                    localStorage: "readonly",
+                    fetch:        "readonly",
+                    confirm:      "readonly",
+                    setTimeout:   "readonly",
+                    console:      "readonly",
+                  },
+                },
+                rules: {
+                  "no-undef":                "error",
+                  "no-unused-vars":          ["warn", { argsIgnorePattern: "^_", caughtErrorsIgnorePattern: "^_" }],
+                  "no-var":                  "error",
+                  "eqeqeq":                 ["error", "always"],
+                  "no-eval":                 "error",
+                  "no-implied-eval":         "error",
+                  "prefer-const":            "warn",
+                  "semi":                   ["error", "always"],
+                  "no-console":              "warn",
+                  "no-debugger":             "error",
+                  "curly":                  ["error", "all"],
+                  "no-multiple-empty-lines": ["warn", { max: 2 }],
+                  "no-trailing-spaces":      "warn",
+                },
+              },
+            ];
+            EOF
+            npx eslint "js/**/*.js" --no-config-lookup --config eslint.config.js
+            rm eslint.config.js

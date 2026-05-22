@@ -1,6 +1,7 @@
 @page {
-    size: A4;
-    margin: 22mm 20mm 22mm 20mm;
+    size: a4;
+    margin: 22mm 20mm;
+
     @bottom-center {
         content: counter(page) " / " counter(pages);
         font-family: -apple-system, "Helvetica Neue", sans-serif;
@@ -9,22 +10,28 @@
     }
 }
 
-* { box-sizing: border-box; }
+* {
+    box-sizing: border-box;
+}
 
-html { font-size: 11pt; }
+html {
+    font-size: 11pt;
+}
 
 body {
-    font-family: "Charter", "Iowan Old Style", "Palatino Linotype", Georgia, serif;
+    font-family: Charter, "Iowan Old Style", "Palatino Linotype", Georgia, serif;
     line-height: 1.55;
     color: #1d1d1f;
     max-width: 100%;
     margin: 0;
     padding: 0;
-    -webkit-font-smoothing: antialiased;
-    text-rendering: optimizeLegibility;
+    text-rendering: optimizelegibility;
 }
 
-h1, h2, h3, h4 {
+h1,
+h2,
+h3,
+h4 {
     font-family: -apple-system, "Helvetica Neue", "Segoe UI", sans-serif;
     color: #0b2a4a;
     line-height: 1.2;
@@ -65,19 +72,27 @@ p {
     margin: 0 0 0.8em;
     text-align: left;
     hyphens: auto;
-    -webkit-hyphens: auto;
 }
 
-ul, ol {
+ul,
+ol {
     margin: 0 0 0.8em;
     padding-left: 1.4em;
 }
 
-li { margin: 0.2em 0; }
+li {
+    margin: 0.2em 0;
+}
 
-a { color: #0b2a4a; text-decoration: none; border-bottom: 1px solid #c7d3e0; }
+a {
+    color: #0b2a4a;
+    text-decoration: none;
+    border-bottom: 1px solid #c7d3e0;
+}
 
-strong { color: #0b2a4a; }
+strong {
+    color: #0b2a4a;
+}
 
 blockquote {
     border-left: 3px solid #0b2a4a;
@@ -88,7 +103,9 @@ blockquote {
     page-break-inside: avoid;
 }
 
-blockquote p { margin: 0.3em 0; }
+blockquote p {
+    margin: 0.3em 0;
+}
 
 code {
     font-family: "JetBrains Mono", "SF Mono", Menlo, Consolas, monospace;
@@ -124,7 +141,8 @@ table {
     page-break-inside: avoid;
 }
 
-th, td {
+th,
+td {
     text-align: left;
     padding: 0.5em 0.7em;
     border-bottom: 1px solid #e2e6ec;
@@ -176,7 +194,9 @@ header#title-block-header p.date {
 }
 
 /* Avoid page breaks splitting code blocks or short sections poorly */
-pre, table, blockquote {
+pre,
+table,
+blockquote {
     orphans: 3;
     widows: 3;
 }
