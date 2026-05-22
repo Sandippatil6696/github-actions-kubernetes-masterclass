@@ -63,7 +63,7 @@ jobs:
         # Temporary Dynamic CSS Config
         - name: Create Stylelint Config
           run: |
-            cat > .stylelintrc.json << 'EOF'
+            cat > eslint.config.js << 'EOF'
             {
               "extends": "stylelint-config-standard"
             }
@@ -118,6 +118,6 @@ jobs:
         - name: Cleanup Temporary Configs
           if: always()
           run: |
-            rm -f .eslintrc.json
+            rm -f .eslint.config.js
             rm -f .stylelintrc.json
             rm -f .htmlhintrc
