@@ -51,6 +51,7 @@ jobs:
           uses: actions/setup-node@v4
           with:
             node-version: 22
+          
         
         - name: Install Lint Tools
           run: |
@@ -60,64 +61,88 @@ jobs:
               stylelint-config-standard \
               htmlhint
         
-        # Temporary Dynamic CSS Config
-        - name: Create Stylelint Config
+         # 1. Lint HTML files
+        - name: Lint HTML
           run: |
-            cat > eslint.config.js << 'EOF'
-            {
-              "extends": "stylelint-config-standard"
-            }
-            EOF
-
-      # Temporary Dynamic HTMLHint Config
-        - name: Create HTMLHint Config
-          run: |
-            cat > .htmlhintrc << 'EOF'
-            {
-              "tag-pair": true,
+            echo '{"rules": 
+              {
               "tagname-lowercase": true,
               "attr-lowercase": true,
               "attr-value-double-quotes": true,
-              "doctype-first": false
-            }
-            EOF
-
-        # Temporary Dynamic ESLINT Config
-        - name: Create ESLint Config
-          run: |
-            cat <<EOF > .eslintrc.json
-            {
-              "env": {
-                "browser": true,
-                "es2021": true
-              },
-              "extends": ["eslint:recommended"],
-              " parserOptions": {
-                "ecmaVersion": "latest",
-                "sourceType": "script"
-              },
-              "rules": {
-                "no-unused-vars": "warn",
-                "no-console": "off"
-              }
-            }
-            EOF
-
-        - name: Run ESLint
-          run: |
-            npx eslint . --ext .js,.jsx,.ts,.tsx
-
-        - name: Run Stylelint
-          run: |
-            npx stylelint "**/*.{css,scss}"
-
-        - name: Run HTMLHint
-          run: |
+              "attr-no-duplication": true,
+              "doctype-first": true,
+              "tag-pair": true,
+              "tag-self-close": false,
+              "spec-char-escape": true,
+              "id-unique": true,
+              "src-not-empty": true,
+              "alt-require": true,
+              "title-require": true,
+              "head-script-disabled": false,
+              "style-disabled": false,
+              "inline-style-disabled": false,
+              "space-tab-mixed-disabled": "space",
+              "id-class-ad-disabled": false,
+              "href-abs-or-rel": false,
+              "attr-unsafe-chars": true,
+              "doctype-html5": true
+            }}' > .htmllintrc.json
             npx htmlhint "**/*.html"
+            rm .htmllintrc.json
 
-        - name: Cleanup Temporary Configs
-          if: always()
+        # 2. Lint CSS files
+        - name: Lint CSS
           run: |
-            rm -f .eslint.config.js
-            rm -f .stylelintrc.json
-            rm -f .htmlhintrc
+            echo '{"rules": 
+              {
+                "color-no-invalid-hex":                             true,
+                "unit-no-unknown":                                  true,
+                "property-no-unknown":                              true,
+                "declaration-block-no-duplicate-properties":        true,
+                "declaration-block-no-shorthand-property-overrides":true,
+                "selector-pseudo-class-no-unknown":                 true,
+                "selector-pseudo-element-no-unknown":               true,
+                "no-duplicate-at-import-rules":                     true,
+                "no-duplicate-selectors":                           true,
+                "no-empty-source":                                  true,
+                "shorthand-property-no-redundant-values":           true,
+                "declaration-block-single-line-max-declarations":   1,
+                "max-nesting-depth":                                3,
+                "selector-max-id":                                  1,
+                "comment-no-empty":                                 true
+              
+              }}' > .stylelintrc.json
+            npx stylelint "**/*.css" --config .stylelintrc.json
+            rm .stylelintrc.json
+
+        # 3. Lint JavaScript files
+        - name: Lint JS
+          run: |
+            echo 'export default [{ 
+            languageOptions: {
+               globals: { window: "readonly", 
+                          document: "readonly", 
+                          localStorage: "readonly", 
+                          fetch: "readonly", 
+                          confirm: "readonly", 
+                          setTimeout: "readonly", 
+                          console: "readonly" }},
+                rules: {
+                "no-console":            "warn",
+                "no-debugger":           "error",
+                "no-undef":              "error",
+                "no-unused-vars":        ["warn", { argsIgnorePattern: "^_" }],
+                "eqeqeq":               ["error", "always"],
+                "curly":                ["error", "all"],
+                "no-eval":               "error",
+                "no-implied-eval":       "error",
+                "no-var":                "error",
+                "prefer-const":          "warn",
+                "no-multiple-empty-lines":["warn", { max: 2 }],
+                "no-trailing-spaces":    "warn",
+                "semi":                 ["error", "always"],
+                "quotes":               ["warn", "double", { avoidEscape: true }],
+              };' > eslint.config.js
+              
+            npx eslint "**/*.js" --no-config-lookup --config eslint.config.js
+            rm eslint.config.js
