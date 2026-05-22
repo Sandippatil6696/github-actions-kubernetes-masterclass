@@ -298,7 +298,7 @@ body {
 }
 
 /* Toast */
-.toast.succes {
+.toast.success {
     background: rgb(16 185 129 / 90%);
     backdrop-filter: blur(8px);
 }
