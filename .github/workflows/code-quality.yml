@@ -56,6 +56,7 @@ jobs:
           run: |
             npm install --save-dev \
               eslint \
+              @eslint/js \
               stylelint \
               stylelint-config-standard \
               htmlhint
