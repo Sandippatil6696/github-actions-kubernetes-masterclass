@@ -47,10 +47,77 @@ jobs:
           with:
             fetch-depth: 0
 
-        - name: Run Super-Linter
-          uses: super-linter/super-linter@v5
-          env:
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-            VALIDATE_HTML: true
-            VALIDATE_CSS: true
-            VALIDATE_JAVASCRIPT_ES: true
+        - name: Setup Node.js
+          uses: actions/setup-node@v4
+          with:
+            node-version: 22
+        
+        - name: Install Lint Tools
+          run: |
+            npm install --save-dev \
+              eslint \
+              stylelint \
+              stylelint-config-standard \
+              htmlhint
+        
+        # Temporary Dynamic CSS Config
+        - name: Create Stylelint Config
+          run: |
+            cat > .stylelintrc.json << 'EOF'
+            {
+              "extends": "stylelint-config-standard"
+            }
+            EOF
+
+      # Temporary Dynamic HTMLHint Config
+        - name: Create HTMLHint Config
+          run: |
+            cat > .htmlhintrc << 'EOF'
+            {
+              "tag-pair": true,
+              "tagname-lowercase": true,
+              "attr-lowercase": true,
+              "attr-value-double-quotes": true,
+              "doctype-first": false
+            }
+            EOF
+
+        # Temporary Dynamic ESLINT Config
+        - name: Create ESLint Config
+          run: |
+            cat <<EOF > .eslintrc.json
+            {
+              "env": {
+                "browser": true,
+                "es2021": true
+              },
+              "extends": ["eslint:recommended"],
+              " parserOptions": {
+                "ecmaVersion": "latest",
+                "sourceType": "script"
+              },
+              "rules": {
+                "no-unused-vars": "warn",
+                "no-console": "off"
+              }
+            }
+            EOF
+
+        - name: Run ESLint
+          run: |
+            npx eslint . --ext .js,.jsx,.ts,.tsx
+
+        - name: Run Stylelint
+          run: |
+            npx stylelint "**/*.{css,scss}"
+
+        - name: Run HTMLHint
+          run: |
+            npx htmlhint "**/*.html"
+
+        - name: Cleanup Temporary Configs
+          if: always()
+          run: |
+            rm -f .eslintrc.json
+            rm -f .stylelintrc.json
+            rm -f .htmlhintrc
