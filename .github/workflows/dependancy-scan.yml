@@ -40,6 +40,10 @@ jobs:
   scan-trivy:
     name: Scan All Dependencies (trivy)
     runs-on: ubuntu-latest
+    permissions:
+      security-events: write   # ← required to upload SARIF to Security tab
+      actions: read            # ← required to read workflow info
+      contents: read
  
     steps:
       - name: Checkout code
