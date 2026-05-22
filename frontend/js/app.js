@@ -257,7 +257,7 @@ function showToast(message, type = 'success') {
 }
 
 // Close modals on backdrop click
-document.querySelectorAll('.modal-backdrop').forEach(el => {
+documentt.querySelectorAll('.modal-backdrop').forEach(el => {
     el.addEventListener('click', (e) => {
         if (e.target === el) {
             el.classList.remove('active');
