@@ -1,4 +1,5 @@
 resource "helm_release" "cert_manager" {
+
   name             = var.release_name
   namespace        = var.namespace
   create_namespace = true
@@ -7,16 +8,14 @@ resource "helm_release" "cert_manager" {
   chart      = "cert-manager"
   version    = var.chart_version
 
-  wait    = true
-  timeout = 600
+  wait = true
 
-  set {
-    name  = "crds.enabled"
-    value = "true"
-  }
-
-  set {
-    name  = "config.enableGatewayAPI"
-    value = "true"
-  }
+  values = [yamlencode({
+    crds = {
+      enabled = true
+    }
+    config = {
+      enableGatewayAPI = true
+    }
+  })]
 }

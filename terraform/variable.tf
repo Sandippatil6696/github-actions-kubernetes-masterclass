@@ -27,3 +27,4 @@ variable "cert_manager_version" {
   type    = string
   default = "v1.18.2"
 }
+

@@ -1,5 +1,5 @@
 locals {
-  env = terraform.workspace
+  env = terraform.workspace == "default" ? "dev" : terraform.workspace
 
   cluster_name = "skillpulse-${local.env}-eks"
 
