@@ -2,25 +2,25 @@ name: Build and push
 
 on:
   workflow_call:
+    inputs:
+      backend:
+        required: true
+        type: string
+      frontend:
+        required: true
+        type: string
     outputs:
       sha_short:
-        value: ${{ jobs.detect-changes.outputs.sha_short }}
-      backend:
-        value: ${{ jobs.detect-changes.outputs.backend }}
-      frontend:
-        value: ${{ jobs.detect-changes.outputs.frontend }}
+        value: ${{ jobs.prepare.outputs.sha_short }}
    
 permissions:
   contents: write
 
 jobs:
-
-    detect-changes:
+    prepare:
       runs-on: ubuntu-latest
       outputs:
         sha_short: ${{ steps.tag.outputs.sha_short }}
-        backend: ${{ steps.filter.outputs.backend }}
-        frontend: ${{ steps.filter.outputs.frontend }}
       steps:
         - name: Checkout code
           uses: actions/checkout@v4
@@ -29,20 +29,12 @@ jobs:
           id: tag
           run: echo "sha_short=$(git rev-parse --short HEAD)" >> "$GITHUB_OUTPUT"
 
-        - name: Detect changed paths
-          uses: dorny/paths-filter@v3
-          id: filter
-          with:
-            filters: |
-              backend:
-                - 'backend/**'
-              frontend:
-                - 'frontend/**'
+  
     
   # ── Build backend only if backend changed
     build-backend:
-        needs: detect-changes
-        if: needs.detect-changes.outputs.backend == 'true'
+        needs: prepare
+        if: inputs.backend == 'true'
         runs-on: ubuntu-latest
         steps:
             
@@ -66,14 +58,14 @@ jobs:
                 push: true
                 tags: |
                        ${{ vars.DOCKERHUB_USER }}/skillpulse-backend:latest 
-                       ${{ vars.DOCKERHUB_USER }}/skillpulse-backend:${{ needs.detect-changes.outputs.sha_short }}
+                       ${{ vars.DOCKERHUB_USER }}/skillpulse-backend:${{ needs.prepare.outputs.sha_short }}
                 cache-from: type=gha,scope=skillpulse-backend
                 cache-to: type=gha,mode=max,scope=skillpulse-backend
 
     # ── Build frontend only if frontend changed ───────────────────
     build-frontend:
-      needs: detect-changes
-      if: needs.detect-changes.outputs.frontend == 'true'
+      needs: prepare
+      if: inputs.frontend == 'true'
       runs-on: ubuntu-latest
       steps:
         - name: Checkout code
@@ -96,6 +88,6 @@ jobs:
             push: true
             tags: |
               ${{ vars.DOCKERHUB_USER }}/skillpulse-frontend:latest
-              ${{ vars.DOCKERHUB_USER }}/skillpulse-frontend:${{ needs.detect-changes.outputs.sha_short }}
+              ${{ vars.DOCKERHUB_USER }}/skillpulse-frontend:${{ needs.prepare.outputs.sha_short }}
             cache-from: type=gha,scope=skillpulse-frontend
             cache-to: type=gha,mode=max,scope=skillpulse-frontend       
