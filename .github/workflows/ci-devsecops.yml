@@ -28,11 +28,14 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
       
       - name: Detect changed paths
         uses: dorny/paths-filter@v3
         id: filter
         with:
+          base:  HEAD~1
           filters: |
             backend:
               - 'backend/**'
