@@ -1,13 +1,7 @@
 name: Dependency-Scan
 
 on:
-    push:
-        branches: [feat-gitops]
-        paths-ignore:
-          - 'k8s/**'
-          - 'docs/**'
-          - '**/*.md'
-    workflow_dispatch:
+  workflow_call:
 
 jobs:
   dependency-scan-backend:
@@ -39,8 +33,10 @@ jobs:
 
   dependency-scan-frontend:
     runs-on: ubuntu-latest
-    permissions:
-      security-events: write   
+    defaults:
+      run:
+        working-directory: frontend
+    permissions:  
       actions: read            # ← required to read workflow info
       contents: read
  
@@ -55,7 +51,7 @@ jobs:
           key: trivy-db-${{ runner.os }}-${{ github.run_id }}
           restore-keys: |
             trivy-db-${{ runner.os }}-
-          save-always: true
+          
  
       - name: Run Trivy on frontend (JS files)
         uses: aquasecurity/trivy-action@master

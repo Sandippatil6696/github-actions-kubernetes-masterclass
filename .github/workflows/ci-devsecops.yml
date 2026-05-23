@@ -1,0 +1,39 @@
+name: CI
+
+on:
+  push:
+    branches: [feat-gitops]
+    paths-ignore:
+      - 'docs/**'
+      - '**/*.md'
+  workflow_dispatch:
+
+jobs:
+
+  # ── Stage 1: parallel ─────────────────────────────────────────
+  code-quality:
+    uses: ./.github/workflows/code-quality.yml
+
+  secret-scan:
+    uses: ./.github/workflows/secret-scan.yml
+    secrets: inherit
+
+  dependancy-scan:
+    uses: ./.github/workflows/dependancy-scan.yml
+
+  docker-lint:
+    uses: ./.github/workflows/docker-lint.yml
+
+  # ── Stage 2: build and push image only ────────────────────────
+  build-and-push:
+    needs: [code-quality, secret-scan, dependancy-scan, docker-lint]
+    uses: ./.github/workflows/build-and-push.yml
+    secrets: inherit
+
+  # ── Stage 3: scan → if clean → update manifest ────────────────
+  image-scan:
+    needs: [build-and-push]
+    uses: ./.github/workflows/image-scan.yml
+    secrets: inherit
+    with:
+      sha_short: ${{ needs.build-and-push.outputs.sha_short }}
