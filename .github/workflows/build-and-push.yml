@@ -65,7 +65,7 @@ jobs:
     # ── Build frontend only if frontend changed ───────────────────
     build-frontend:
       needs: prepare
-      if: ${{ inputs.backend == 'true' }}
+      if: ${{ inputs.frontend == 'true' }}
       runs-on: ubuntu-latest
       steps:
         - name: Checkout code
