@@ -1,5 +1,4 @@
 name: CI-DevSecOps
-
 on:
   push:
     branches: [feat-gitops]
