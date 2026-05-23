@@ -19,7 +19,7 @@ permissions:
 
 jobs:
   scan-backend:
-    if: inputs.backend == 'true'
+    if: ${{ inputs.backend == 'true' }}
     runs-on: ubuntu-latest
 
     steps:
@@ -65,7 +65,7 @@ jobs:
           git push
 
   scan-frontend:
-    if: inputs.frontend == 'true'
+    if: ${{ inputs.frontend == 'true' }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code

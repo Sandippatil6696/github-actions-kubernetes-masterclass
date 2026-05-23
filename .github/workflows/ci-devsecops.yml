@@ -39,6 +39,11 @@ jobs:
             frontend:
               - 'frontend/**'
 
+      - name: Debug outputs       
+        run: |
+          echo "backend=${{ steps.filter.outputs.backend }}"
+          echo "frontend=${{ steps.filter.outputs.frontend }}"
+
   # ── Stage 1: parallel ─────────────────────────────────────────
   code-quality:
     uses: ./.github/workflows/code-quality.yml
