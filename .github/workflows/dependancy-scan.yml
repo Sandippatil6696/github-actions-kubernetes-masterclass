@@ -36,9 +36,6 @@ jobs:
     defaults:
       run:
         working-directory: frontend
-    permissions:  
-      actions: read            # ← required to read workflow info
-      contents: read
  
     steps:
       - name: Checkout code

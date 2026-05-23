@@ -12,6 +12,10 @@ on:
       - 'setup.sh'
   workflow_dispatch:
   
+permissions:
+  contents: write
+  actions: read           # ← required by dependency-scan-frontend (trivy)
+  security-events: write
 
 jobs:
 
