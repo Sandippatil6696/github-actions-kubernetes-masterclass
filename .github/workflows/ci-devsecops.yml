@@ -13,7 +13,7 @@ on:
   workflow_dispatch:
   
 permissions:
-  contents: write
+  contents: read   # ← required to update manifest and commit back
   actions: read           # ← required by dependency-scan-frontend (trivy)
   security-events: write
 
