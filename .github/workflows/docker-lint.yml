@@ -1,0 +1,25 @@
+name: Lint Dockerfiles
+
+on:
+  push:
+    branches: [feat-gitops]
+    paths:
+      - 'frontend/Dockerfile'
+      - 'backend/Dockerfile'
+
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        service: [frontend, backend]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Lint ${{ matrix.service }} Dockerfile
+        uses: hadolint/hadolint-action@v3.1.0
+        with:
+          dockerfile: ${{ matrix.service }}/Dockerfile
