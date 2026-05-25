@@ -1,25 +1,11 @@
 ---
-apiVersion: v1
-kind: Service
-metadata:
-  name: backend
-  namespace: skillpulse
-  labels:
-    app: backend
-spec:
-  type: ClusterIP
-  selector:
-    app: backend
-  ports:
-    - name: http
-      port: 8080
-      targetPort: 8080
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: backend
   namespace: skillpulse
+  annotations:
+    argocd.argoproj.io/sync-wave: "4"
 spec:
   replicas: 1
   selector:
@@ -30,6 +16,17 @@ spec:
       labels:
         app: backend
     spec:
+      initContainers:
+        - name: wait-for-mysql
+          image: busybox:1.36
+          command: ["/bin/sh", "-c", "until nc -z mysql 3306; do sleep 2; done"]
+          resources:
+            requests:
+              memory: "32Mi"
+              cpu: "50m"
+            limits:
+              memory: "64Mi"
+              cpu: "100m"
       containers:
         - name: backend
           image: sandippatil6696/skillpulse-backend:e266a63
@@ -61,19 +58,26 @@ spec:
                   key: MYSQL_DATABASE
           resources:
             requests:
-              cpu: 100m
-              memory: 64Mi
+              cpu: 250m
+              memory: 256Mi
             limits:
-              memory: 128Mi
+              cpu: 500m
+              memory: 512Mi
+          startupProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            failureThreshold: 30
+            periodSeconds: 10
           livenessProbe:
             httpGet:
               path: /health
               port: 8080
-            initialDelaySeconds: 15
-            periodSeconds: 10
+            initialDelaySeconds: 30
+            periodSeconds: 1
           readinessProbe:
             httpGet:
               path: /health
               port: 8080
-            initialDelaySeconds: 5
-            periodSeconds: 5
+            initialDelaySeconds: 60
+            periodSeconds: 10
