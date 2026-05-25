@@ -32,7 +32,7 @@ spec:
               cpu: "100m"
       containers:
         - name: frontend
-          image: sandippatil6696/skillpulse-frontend:ac69741
+          image: sandippatil6696/skillpulse-frontend:cb10fd7
           imagePullPolicy: Always
           ports:
             - name: http
