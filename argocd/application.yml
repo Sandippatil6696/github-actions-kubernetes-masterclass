@@ -3,25 +3,22 @@ kind: Application
 metadata:
   name: skillpulse
   namespace: argocd
-
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
 spec:
-  project: skillpulse
-
-  destination:
-    server: https://kubernetes.default.svc
-    namespace: skillpulse
-
+  project: default
   source:
     repoURL: https://github.com/Sandippatil6696/github-actions-kubernetes-masterclass.git
     targetRevision: feat-gitops
     path: k8s
-
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: skillpulse
   syncPolicy:
     automated:
       enabled: true
       prune: false
       selfHeal: true
-
     syncOptions:
       - CreateNamespace=true
       - ServerSideApply=true
