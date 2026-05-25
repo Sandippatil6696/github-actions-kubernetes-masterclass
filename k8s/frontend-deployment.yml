@@ -4,8 +4,6 @@ kind: Deployment
 metadata:
   name: frontend
   namespace: skillpulse
-  annotations:
-    argocd.argoproj.io/sync-wave: "7"
 spec:
   replicas: 1
   selector:

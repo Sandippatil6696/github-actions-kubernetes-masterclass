@@ -4,8 +4,6 @@ kind: ConfigMap
 metadata:
   name: mysql-init
   namespace: skillpulse
-  annotations:
-    argocd.argoproj.io/sync-wave: "0"
 data:
   init.sql: |
     CREATE DATABASE IF NOT EXISTS skillpulse;

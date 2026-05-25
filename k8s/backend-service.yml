@@ -4,8 +4,6 @@ kind: Service
 metadata:
   name: backend
   namespace: skillpulse
-  annotations:
-    argocd.argoproj.io/sync-wave: "3"
   labels:
     app: backend
 spec:

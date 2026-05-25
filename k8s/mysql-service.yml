@@ -4,8 +4,6 @@ kind: Service
 metadata:
   name: mysql
   namespace: skillpulse
-  annotations:
-    argocd.argoproj.io/sync-wave: "1"
   labels:
     app: mysql
 spec:

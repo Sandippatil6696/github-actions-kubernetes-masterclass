@@ -4,8 +4,6 @@ kind: Service
 metadata:
   name: frontend
   namespace: skillpulse
-  annotations:
-    argocd.argoproj.io/sync-wave: "6"
   labels:
     app: frontend
 spec:
