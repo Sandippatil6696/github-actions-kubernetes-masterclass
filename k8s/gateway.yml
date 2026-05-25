@@ -16,7 +16,7 @@ metadata:
   name: skillpulse-gateway
   namespace: skillpulse
   annotations:
-    argocd.argoproj.io/sync-wave: "8"
+    argocd.argoproj.io/sync-wave: "9"
     cert-manager.io/cluster-issuer: letsencrypt-prod
 spec:
   gatewayClassName: envoy-gateway
@@ -51,7 +51,7 @@ metadata:
   name: skillpulse-route
   namespace: skillpulse
   annotations:
-    argocd.argoproj.io/sync-wave: "8"
+    argocd.argoproj.io/sync-wave: "10"
 spec:
   hostnames:
     - 35.95.165.4.nip.io
@@ -86,7 +86,7 @@ metadata:
   name: skillpulse-session
   namespace: skillpulse
   annotations:
-    argocd.argoproj.io/sync-wave: "8"
+    argocd.argoproj.io/sync-wave: "11"
 spec:
   targetRefs:
     - group: gateway.networking.k8s.io

@@ -10,10 +10,6 @@ metadata:
     app: frontend
 spec:
   type: ClusterIP
-  sessionAffinity: ClientIP
-  sessionAffinityConfig:
-    clientIP:
-      timeoutSeconds: 3600
   selector:
     app: frontend
   ports:
