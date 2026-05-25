@@ -3,6 +3,7 @@
 # Sized for t3.medium (2 vCPU / 4 GiB): max 4 replicas keeps
 # total workload requests under node capacity.
 # ─────────────────────────────────────────────────────────────────
+---
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
