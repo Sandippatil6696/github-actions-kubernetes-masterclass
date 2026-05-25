@@ -28,7 +28,7 @@ spec:
       containers:
         - name: frontend
           image: sandippatil6696/skillpulse-frontend:1772b2b
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           ports:
             - name: http
               containerPort: 80
@@ -49,5 +49,5 @@ spec:
             httpGet:
               path: /
               port: 80
-            initialDelaySeconds: 2
+            initialDelaySeconds: 5
             periodSeconds: 5

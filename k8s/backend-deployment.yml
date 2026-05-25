@@ -28,7 +28,7 @@ spec:
       containers:
         - name: backend
           image: sandippatil6696/skillpulse-backend:1772b2b
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           ports:
             - name: http
               containerPort: 8080
