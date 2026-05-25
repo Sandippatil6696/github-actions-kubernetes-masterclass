@@ -5,7 +5,7 @@ metadata:
   name: frontend
   namespace: skillpulse
 spec:
-  replicas: 1
+  replicas: 2
   strategy:
     type: RollingUpdate
     rollingUpdate:
