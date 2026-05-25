@@ -1,0 +1,28 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: skillpulse
+  namespace: argocd
+spec:
+  destination:
+    namespace: skillpulse
+    server: https://kubernetes.default.svc
+  source:
+    path: k8s
+    repoURL: >-
+      https://github.com/Sandippatil6696/github-actions-kubernetes-masterclass.git
+    targetRevision: feat-gitops
+    directory:
+      jsonnet:
+        tlas:
+          - {}
+  sources: []
+  project: skillpulse
+  syncPolicy:
+    automated:
+      prune: false
+      selfHeal: true
+      enabled: true
+    syncOptions:
+      - ServerSideApply=true
+      - CreateNamespace=true
