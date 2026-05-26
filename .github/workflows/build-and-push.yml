@@ -2,42 +2,33 @@ name: Build and push
 
 on:
   workflow_call:
-    inputs:
-      backend:
-        required: true
-        type: string
-      frontend:
-        required: true
-        type: string
     outputs:
       sha_short:
-        value: ${{ jobs.prepare.outputs.sha_short }}
+        description: "Short SHA used as image tag"
+        value: ${{ jobs.build-and-push.outputs.sha_short }}
    
+    
 permissions:
   contents: write
 
+
 jobs:
-    prepare:
-      runs-on: ubuntu-latest
-      outputs:
-        sha_short: ${{ steps.tag.outputs.sha_short }}
-      steps:
-        - name: Checkout code
-          uses: actions/checkout@v4
-
-        - name: Shorten image tag
-          id: tag
-          run: echo "sha_short=$(git rev-parse --short HEAD)" >> "$GITHUB_OUTPUT"
-
-  
-    
-  # ── Build backend only if backend changed
-    build-backend:
-        needs: prepare
-        if: ${{ inputs.backend == 'true' }}
+    build-and-push:
         runs-on: ubuntu-latest
+        outputs:
+            sha_short: ${{ steps.tag.outputs.sha_short }}
+        strategy:
+          matrix:
+            include:
+              - image: skillpulse-backend
+                context: ./backend
+                dockerfile: ./backend/Dockerfile
+
+              - image: skillpulse-frontend
+                context: ./frontend
+                dockerfile: ./frontend/Dockerfile    
+
         steps:
-            
             - name: checkout code
               uses: actions/checkout@v4
               
@@ -47,47 +38,23 @@ jobs:
                 username: ${{ vars.DOCKERHUB_USER }}
                 password: ${{ secrets.DOCKERHUB_TOKEN }}
 
+            - name: shorten image tag
+              id: tag
+              run: echo "sha_short=$(git rev-parse --short HEAD)" >> "$GITHUB_OUTPUT"
+
             - name: Set up Docker Buildx
               uses: docker/setup-buildx-action@v3
 
             - name: build and push 
               uses: docker/build-push-action@v6
               with:
-                context: ./backend
-                file: ./backend/Dockerfile
+                context: ${{ matrix.context }}
+                file: ${{ matrix.dockerfile }}
                 push: true
                 tags: |
-                       ${{ vars.DOCKERHUB_USER }}/skillpulse-backend:latest 
-                       ${{ vars.DOCKERHUB_USER }}/skillpulse-backend:${{ needs.prepare.outputs.sha_short }}
-                cache-from: type=gha,scope=skillpulse-backend
-                cache-to: type=gha,mode=max,scope=skillpulse-backend
+                       ${{ vars.DOCKERHUB_USER }}/${{ matrix.image }}:latest 
+                       ${{ vars.DOCKERHUB_USER }}/${{ matrix.image }}:${{ steps.tag.outputs.sha_short }}
+                cache-from: type=gha,scope=${{ matrix.image }}
+                cache-to: type=gha,mode=max,scope=${{ matrix.image }}
 
-    # ── Build frontend only if frontend changed ───────────────────
-    build-frontend:
-      needs: prepare
-      if: ${{ inputs.frontend == 'true' }}
-      runs-on: ubuntu-latest
-      steps:
-        - name: Checkout code
-          uses: actions/checkout@v4
-
-        - name: Login to Docker Hub
-          uses: docker/login-action@v3
-          with:
-            username: ${{ vars.DOCKERHUB_USER }}
-            password: ${{ secrets.DOCKERHUB_TOKEN }}
-
-        - name: Set up Docker Buildx
-          uses: docker/setup-buildx-action@v3
-
-        - name: Build and push frontend
-          uses: docker/build-push-action@v6
-          with:
-            context: ./frontend
-            file: ./frontend/Dockerfile
-            push: true
-            tags: |
-              ${{ vars.DOCKERHUB_USER }}/skillpulse-frontend:latest
-              ${{ vars.DOCKERHUB_USER }}/skillpulse-frontend:${{ needs.prepare.outputs.sha_short }}
-            cache-from: type=gha,scope=skillpulse-frontend
-            cache-to: type=gha,mode=max,scope=skillpulse-frontend       
+           

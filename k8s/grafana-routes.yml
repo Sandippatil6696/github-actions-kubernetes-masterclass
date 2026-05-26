@@ -1,16 +1,3 @@
-# TLS certificate for Grafana
-apiVersion: cert-manager.io/v1
-kind: Certificate
-metadata:
-  name: grafana-tls
-  namespace: monitoring          # where kube-prometheus-stack is installed
-spec:
-  secretName: grafana-tls
-  issuerRef:
-    name: letsencrypt-prod
-    kind: ClusterIssuer
-  dnsNames:
-    - grafana.52.88.97.228.nip.io
 ---
 # Route HTTPS traffic to Grafana
 apiVersion: gateway.networking.k8s.io/v1

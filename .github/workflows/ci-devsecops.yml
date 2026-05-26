@@ -19,34 +19,6 @@ permissions:
 
 jobs:
 
-   # ── Detect changes first ───────────────────────────────────────
-  detect-changes:
-    runs-on: ubuntu-latest
-    outputs:
-      backend: ${{ steps.filter.outputs.backend }}
-      frontend: ${{ steps.filter.outputs.frontend }}
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 2
-      
-      - name: Detect changed paths
-        uses: dorny/paths-filter@v3
-        id: filter
-        with:
-          base: ${{ github.event.before }}
-          filters: |
-            backend:
-              - 'backend/**'
-            frontend:
-              - 'frontend/**'
-
-      - name: Debug outputs       
-        run: |
-          echo "backend=${{ steps.filter.outputs.backend }}"
-          echo "frontend=${{ steps.filter.outputs.frontend }}"
-
   # ── Stage 1: parallel ─────────────────────────────────────────
   code-quality:
     uses: ./.github/workflows/code-quality.yml
@@ -63,20 +35,15 @@ jobs:
 
   # ── Stage 2: build and push image only ────────────────────────
   build-and-push:
-    needs: [detect-changes, code-quality, secret-scan, dependancy-scan, docker-lint]
+    needs: [code-quality, secret-scan, dependancy-scan, docker-lint]
     uses: ./.github/workflows/build-and-push.yml
     secrets: inherit
-    with:
-      backend: ${{ needs.detect-changes.outputs.backend }}
-      frontend: ${{ needs.detect-changes.outputs.frontend }}
-     
- 
+
   # ── Stage 3: scan → if clean → update manifest ────────────────
   image-scan:
-    needs: [build-and-push,detect-changes]
+    needs: [build-and-push]
     uses: ./.github/workflows/image-scan.yml
     secrets: inherit
     with:
       sha_short: ${{ needs.build-and-push.outputs.sha_short }}
-      backend: ${{ needs.detect-changes.outputs.backend }}
-      frontend: ${{ needs.detect-changes.outputs.frontend }}
+      
