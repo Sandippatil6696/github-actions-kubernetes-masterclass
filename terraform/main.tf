@@ -40,7 +40,7 @@ module "eks" {
 module "argocd" {
   source = "./modules/argocd"
   namespace    = "argocd"
-  service_type = "LoadBalancer"
+  service_type = "ClusterIP"
   eks_dependency = module.eks
 }
 
@@ -72,6 +72,6 @@ module "cert_manager" {
 module "monitoring" {
   source = "./modules/monitoring"
   namespace            = "monitoring"
-  grafana_service_type = "LoadBalancer"
+  grafana_service_type = "ClusterIP"
   depends_on = [module.eks]
 }

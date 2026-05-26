@@ -42,6 +42,36 @@ spec:
       allowedRoutes:
         namespaces:
           from: Same
+
+     # ── new: Grafana ─────────────────────────────────────────────────
+    - name: https-grafana
+      protocol: HTTPS
+      port: 443
+      hostname: grafana.54.71.71.232.nip.io
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - group: ""
+            kind: Secret
+            name: grafana-tls      # cert-manager will create this in skillpulse ns
+      allowedRoutes:
+        namespaces:
+          from: All                # HTTPRoute lives in monitoring ns
+
+    # ── new: ArgoCD ──────────────────────────────────────────────────
+    - name: https-argocd
+      protocol: HTTPS
+      port: 443
+      hostname: argocd.54.71.71.232.nip.io
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - group: ""
+            kind: Secret
+            name: argocd-tls       # cert-manager will create this in skillpulse ns
+      allowedRoutes:
+        namespaces:
+          from: All                # HTTPRoute lives in argocd ns
 ---
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute

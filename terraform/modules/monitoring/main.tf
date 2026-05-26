@@ -11,7 +11,7 @@ resource "helm_release" "kube_prometheus" {
   values = [yamlencode({
     grafana = {
       service = {
-        type = "LoadBalancer" # same as --set grafana.service.type=LoadBalancer
+        type = "ClusterIP" # same as --set grafana.service.type=LoadBalancer
       }
     }
   })]

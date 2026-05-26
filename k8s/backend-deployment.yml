@@ -33,6 +33,10 @@ spec:
       containers:
         - name: backend
           image: sandippatil6696/skillpulse-backend:555d818
+          lifecycle:
+            preStop:
+              exec:
+                command: ["/bin/sh", "-c", "sleep 10"]
           imagePullPolicy: Always
           ports:
             - name: http

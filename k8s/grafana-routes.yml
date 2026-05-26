@@ -1,0 +1,46 @@
+# TLS certificate for Grafana
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: grafana-tls
+  namespace: monitoring          # where kube-prometheus-stack is installed
+spec:
+  secretName: grafana-tls
+  issuerRef:
+    name: letsencrypt-prod
+    kind: ClusterIssuer
+  dnsNames:
+    - grafana.54.71.71.232.nip.io
+---
+# Route HTTPS traffic to Grafana
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: grafana-route
+  namespace: monitoring
+spec:
+  hostnames:
+    - grafana.54.71.71.232.nip.io
+  parentRefs:
+    - group: gateway.networking.k8s.io
+      kind: Gateway
+      name: skillpulse-gateway
+      namespace: skillpulse
+      sectionName: grafana-https
+    - group: gateway.networking.k8s.io
+      kind: Gateway
+      name: skillpulse-gateway
+      namespace: skillpulse
+      sectionName: http            # for ACME HTTP-01 challenge
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - group: ""
+          kind: Service
+          name: kube-prometheus-grafana   # adjust to your actual service name
+          namespace: monitoring
+          port: 80
+          weight: 1
