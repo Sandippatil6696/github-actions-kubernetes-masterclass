@@ -6,7 +6,7 @@ metadata:
   namespace: skillpulse
 spec:
   hostnames:
-    - 54.71.71.232.nip.io
+    - 52.88.97.228.nip.io
   parentRefs:
     - group: gateway.networking.k8s.io
       kind: Gateway

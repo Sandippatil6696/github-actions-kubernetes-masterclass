@@ -10,7 +10,7 @@ spec:
     name: letsencrypt-prod
     kind: ClusterIssuer
   dnsNames:
-    - grafana.54.71.71.232.nip.io
+    - grafana.52.88.97.228.nip.io
 ---
 # Route HTTPS traffic to Grafana
 apiVersion: gateway.networking.k8s.io/v1
@@ -20,7 +20,7 @@ metadata:
   namespace: monitoring
 spec:
   hostnames:
-    - grafana.54.71.71.232.nip.io
+    - grafana.52.88.97.228.nip.io
   parentRefs:
     - group: gateway.networking.k8s.io
       kind: Gateway

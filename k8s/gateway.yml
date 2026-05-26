@@ -32,7 +32,7 @@ spec:
     - name: https
       protocol: HTTPS
       port: 443
-      hostname: 54.71.71.232.nip.io
+      hostname: 52.88.97.228.nip.io
       tls:
         mode: Terminate
         certificateRefs:
@@ -46,7 +46,7 @@ spec:
     - name: grafana-https
       protocol: HTTPS
       port: 443
-      hostname: grafana.54.71.71.232.nip.io
+      hostname: grafana.52.88.97.228.nip.io
       tls:
         mode: Terminate
         certificateRefs:
@@ -60,7 +60,7 @@ spec:
     - name: argocd-https
       protocol: HTTPS
       port: 443
-      hostname: argocd.54.71.71.232.nip.io
+      hostname: argocd.52.88.97.228.nip.io
       tls:
         mode: Terminate
         certificateRefs:
