@@ -47,9 +47,14 @@ output "configure_kubectl" {
   value       = "aws eks update-kubeconfig --name ${module.eks.cluster_name} --region ${var.aws_region}"
 }
 
+output "gateway_nlb_ip" {
+  description = "Command to get the Envoy Gateway NLB address (use this IP for nip.io hostnames)"
+  value       = "kubectl get gateway skillpulse-gateway -n skillpulse -o jsonpath='{.status.addresses[*].value}'"
+}
+
 output "argocd_url" {
-  description = "Command to get ArgoCD url"
-  value       = "kubectl get svc argocd-server -n argocd -o jsonpath='{.status.loadBalancer.ingress[0].hostname}'"
+  description = "ArgoCD URL (replace NLB_IP with output of gateway_nlb_ip)"
+  value       = "https://argocd.NLB_IP.nip.io"
 }
 
 output "argocd_initial_password" {
@@ -58,11 +63,17 @@ output "argocd_initial_password" {
 }
 
 output "grafana_url" {
-  description = "Command to Grafana URL"
-  value       = "kubectl get svc kube-prometheus-grafana -n monitoring -o jsonpath='{.status.loadBalancer.ingress[0].hostname}'"
+  description = "Grafana URL (replace NLB_IP with output of gateway_nlb_ip)"
+  value       = "https://grafana.NLB_IP.nip.io"
 }
 
-output "grafana_initial_passowrd" {
-  description = "Command to get Grafana initial admin password"
+output "grafana_admin_password" {
+  description = "Command to get Grafana admin password"
   value       = "kubectl get secret kube-prometheus-grafana -n monitoring -o jsonpath='{.data.admin-password}' | base64 -d; echo"
+  sensitive   = true
+}
+
+output "app_url" {
+  description = "Main application URL (replace NLB_IP with output of gateway_nlb_ip)"
+  value       = "https://NLB_IP.nip.io"
 }
