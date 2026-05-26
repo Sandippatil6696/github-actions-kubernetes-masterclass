@@ -1,0 +1,46 @@
+# TLS certificate for ArgoCD
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: argocd-tls
+  namespace: argocd
+spec:
+  secretName: argocd-tls
+  issuerRef:
+    name: letsencrypt-prod
+    kind: ClusterIssuer
+  dnsNames:
+    - argocd.54.71.71.232.nip.io
+---
+# Route HTTPS traffic to ArgoCD
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: argocd-route
+  namespace: argocd
+spec:
+  hostnames:
+    - argocd.54.71.71.232.nip.io
+  parentRefs:
+    - group: gateway.networking.k8s.io
+      kind: Gateway
+      name: skillpulse-gateway
+      namespace: skillpulse
+      sectionName: argocd-https
+    - group: gateway.networking.k8s.io
+      kind: Gateway
+      name: skillpulse-gateway
+      namespace: skillpulse
+      sectionName: http
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - group: ""
+          kind: Service
+          name: argocd-server
+          namespace: argocd
+          port: 80                # only works if argocd-server runs in --insecure mode
+          weight: 1
