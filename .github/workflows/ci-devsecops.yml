@@ -10,7 +10,7 @@ on:
       - 'Makefile' 
       - '.gitignore' 
       - 'setup.sh'
-      - 'agocd/**'
+      - 'argocd/**'
   workflow_dispatch:
   
 permissions:
