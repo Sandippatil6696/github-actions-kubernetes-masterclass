@@ -10,6 +10,7 @@ on:
       - 'Makefile' 
       - '.gitignore' 
       - 'setup.sh'
+      - 'agocd/**'
   workflow_dispatch:
   
 permissions:
@@ -46,4 +47,3 @@ jobs:
     secrets: inherit
     with:
       sha_short: ${{ needs.build-and-push.outputs.sha_short }}
-      
