@@ -70,7 +70,6 @@ output "grafana_url" {
 output "grafana_admin_password" {
   description = "Command to get Grafana admin password"
   value       = "kubectl get secret kube-prometheus-grafana -n monitoring -o jsonpath='{.data.admin-password}' | base64 -d; echo"
-  sensitive   = true
 }
 
 output "app_url" {

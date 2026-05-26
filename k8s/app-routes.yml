@@ -1,0 +1,51 @@
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: skillpulse-route
+  namespace: skillpulse
+spec:
+  hostnames:
+    - 54.71.71.232.nip.io
+  parentRefs:
+    - group: gateway.networking.k8s.io
+      kind: Gateway
+      name: skillpulse-gateway
+      sectionName: https
+    - group: gateway.networking.k8s.io
+      kind: Gateway
+      name: skillpulse-gateway
+      sectionName: http
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - group: ""
+          kind: Service
+          name: frontend
+          port: 80
+          weight: 1
+---
+# Session persistence: Envoy Gateway bypasses K8s Service sessionAffinity and
+# load-balances directly to pod endpoints. Without this policy, requests from
+# the same browser can hit different pods, breaking in-memory sessions (CSRF
+# tokens, login state). Cookie-based consistent hashing pins a browser to one pod.
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: BackendTrafficPolicy
+metadata:
+  name: skillpulse-session
+  namespace: skillpulse
+spec:
+  targetRefs:
+    - group: gateway.networking.k8s.io
+      kind: HTTPRoute
+      name: skillpulse-route
+  loadBalancer:
+    type: ConsistentHash
+    consistentHash:
+      type: Cookie
+      cookie:
+        name: SKILLPULSE_AFFINITY
+        ttl: 3600s
