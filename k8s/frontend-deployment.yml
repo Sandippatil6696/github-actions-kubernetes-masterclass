@@ -32,7 +32,7 @@ spec:
               cpu: "100m"
       containers:
         - name: frontend
-          image: sandippatil6696/skillpulse-frontend:ef41907
+          image: sandippatil6696/skillpulse-frontend:7ed07fa
           imagePullPolicy: Always
           lifecycle:
             preStop:
