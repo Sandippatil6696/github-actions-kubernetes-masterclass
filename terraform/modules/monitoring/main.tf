@@ -1,3 +1,29 @@
+#Loki Stack (Loki + Promtail)
+resource "helm_release" "loki" {
+  name             = "loki"
+  repository       = "https://grafana.github.io/helm-charts"
+  chart            = "loki-stack"
+  namespace        = var.namespace
+  create_namespace = true
+
+  wait    = true
+  timeout = 600
+
+  values = [yamlencode({
+    loki = {
+      enabled = true
+      persistence = {
+        enabled = true
+        size    = "10Gi"
+      }
+    }
+    promtail = {
+      enabled = true
+    }
+  })]
+}
+
+#Kube Prometheus Stack (Prometheus + Alertmanager + Grafana)
 resource "helm_release" "kube_prometheus" {
   name             = "kube-prometheus"
   repository       = "https://prometheus-community.github.io/helm-charts"
@@ -13,8 +39,38 @@ resource "helm_release" "kube_prometheus" {
       service = {
         type = "ClusterIP" # same as --set grafana.service.type=LoadBalancer
       }
+      additionalDataSources = [
+        {
+          name   = "Loki"
+          type   = "loki"
+          access = "proxy"
+          url    = "http://loki.${var.namespace}.svc.cluster.local:3100"
+          jsonData = {
+            maxLines = 1000
+          }
+        }
+      ]
     }
   })]
 
  
+}
+
+# OpenTelemetry Collector
+resource "helm_release" "otel_collector" {
+  name             = "otel-collector"
+  repository       = "https://open-telemetry.github.io/opentelemetry-helm-charts"
+  chart            = "opentelemetry-collector"
+  namespace        = var.namespace
+  create_namespace = true
+
+  wait    = true
+  timeout = 600
+
+  values = [file("${path.module}/otel-values.yml")]
+
+  depends_on = [
+    helm_release.loki,
+    helm_release.kube_prometheus,
+  ]
 }
