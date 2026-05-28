@@ -52,3 +52,6 @@ spec:
       cookie:
         name: SKILLPULSE_AFFINITY
         ttl: 3600s
+  timeout:
+    tcp:
+      connectTimeout: 5s

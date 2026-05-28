@@ -19,6 +19,7 @@ spec:
       labels:
         app: backend
     spec:
+      terminationGracePeriodSeconds: 40
       initContainers:
         - name: wait-for-mysql
           image: busybox:1.36
@@ -90,3 +91,5 @@ spec:
               port: 8080
             initialDelaySeconds: 5
             periodSeconds: 5
+            timeoutSeconds: 3       
+            failureThreshold: 3
