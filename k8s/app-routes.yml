@@ -21,6 +21,9 @@ spec:
         - path:
             type: PathPrefix
             value: /
+      timeouts:
+        request: 60s          # total time client waits
+        backendRequest: 55s   # time Envoy waits for upstream response
       backendRefs:
         - group: ""
           kind: Service
