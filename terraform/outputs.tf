@@ -76,3 +76,8 @@ output "app_url" {
   description = "Main application URL (replace NLB_IP with output of gateway_nlb_ip)"
   value       = "https://NLB_IP.nip.io"
 }
+
+output "myapp_secrets_role_arn" {
+  description = "myapp_secrets_role_arn"
+  value       = aws_iam_policy.myapp_secrets_policy.arn
+}
