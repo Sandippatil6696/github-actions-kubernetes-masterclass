@@ -78,7 +78,6 @@ module "monitoring" {
 
 module "secret_store_csi_driver" {
   source = "./modules/secret-store-csi-driver"
-
-  # pass any required variables
   namespace = var.namespace
+  oidc_provider = module.eks.oidc_provider
 }

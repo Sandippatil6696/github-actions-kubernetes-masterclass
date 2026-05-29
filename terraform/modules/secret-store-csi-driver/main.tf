@@ -53,7 +53,7 @@ module "secrets_irsa_role" {
 
   role_name = "secrets-role"
 
-  provider_url = module.eks.oidc_provider
+  provider_url = var.oidc_provider
 
   role_policy_arns = [
     aws_iam_policy.myapp_secrets_policy.arn,
