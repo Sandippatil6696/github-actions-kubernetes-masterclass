@@ -67,7 +67,7 @@ resource "helm_release" "otel_collector" {
   wait    = true
   timeout = 600
 
-  values = [file("${path.module}/otel-values.yml")]
+  values = [file("${path.module}/otel-config.yml")]
 
   depends_on = [
     helm_release.loki,
