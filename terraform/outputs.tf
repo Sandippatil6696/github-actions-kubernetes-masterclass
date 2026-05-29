@@ -79,5 +79,5 @@ output "app_url" {
 
 output "myapp_secrets_role_arn" {
   description = "myapp_secrets_role_arn"
-  value       = module.secrets_csi_driver_aws_provider.aws_iam_policy.myapp_secrets_role_arn.arn
+  value       = module.secrets_irsa_role.myapp_secrets_role_arn
 }
