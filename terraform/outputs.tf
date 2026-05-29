@@ -79,5 +79,5 @@ output "app_url" {
 
 output "myapp_secrets_role_arn" {
   description = "myapp_secrets_role_arn"
-  value       = module.secrets_irsa_role.myapp_secrets_role_arn
+  value       = module.secret-store-csi-driver.myapp_secrets_role_arn
 }

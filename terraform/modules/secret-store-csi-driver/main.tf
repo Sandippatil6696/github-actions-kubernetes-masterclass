@@ -57,7 +57,6 @@ module "secrets_irsa_role" {
 
   role_policy_arns = [
     aws_iam_policy.myapp_secrets_policy.arn,
-    
   ]
 
   oidc_fully_qualified_subjects = ["system:serviceaccount:${var.namespace}:secrets-sa"]
