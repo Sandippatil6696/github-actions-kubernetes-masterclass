@@ -28,3 +28,7 @@ variable "cert_manager_version" {
   default = "v1.18.2"
 }
 
+variable "namespace" {
+  type    = string
+  default = "skillpulse"
+}

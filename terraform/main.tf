@@ -75,3 +75,10 @@ module "monitoring" {
   grafana_service_type = "ClusterIP"
   depends_on = [module.eks]
 }
+
+module "secret_store_csi_driver" {
+  source = "./modules/secret-store-csi-driver"
+
+  # pass any required variables
+  namespace = var.namespace
+}
