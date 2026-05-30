@@ -35,7 +35,7 @@ resource "helm_release" "kube_prometheus" {
   create_namespace = true
 
   wait    = true
-  timeout = 1800
+  timeout = 1200
   atomic  = true
   wait_for_jobs = true
 
@@ -52,6 +52,7 @@ resource "helm_release" "kube_prometheus" {
           type   = "loki"
           access = "proxy"
           url    = "http://loki.${var.namespace}.svc.cluster.local:3100"
+          isDefault = false
           jsonData = {
             maxLines = 1000
           }
