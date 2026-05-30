@@ -46,18 +46,44 @@ resource "helm_release" "kube_prometheus" {
       service = {
         type = "ClusterIP" # same as --set grafana.service.type=LoadBalancer
       }
-      additionalDataSources = [
-        {
-          name   = "Loki"
-          type   = "loki"
-          access = "proxy"
-          url    = "http://loki.${var.namespace}.svc.cluster.local:3100"
-          isDefault = false
-          jsonData = {
-            maxLines = 1000
+      # additionalDataSources = [
+      #   {
+      #     name   = "Loki"
+      #     type   = "loki"
+      #     access = "proxy"
+      #     url    = "http://loki.${var.namespace}.svc.cluster.local:3100"
+      #     isDefault = false
+      #     jsonData = {
+      #       maxLines = 1000
+      #     }
+      #   }
+      # ]
+
+      datasources = {
+      "datasources.yaml" = {
+        apiVersion = 1
+        datasources = [
+          {
+            name      = "Prometheus"
+            type      = "prometheus"
+            url       = "http://kube-prometheus-prometheus.${var.namespace}.svc.cluster.local:9090"
+            access    = "proxy"
+            isDefault = true   # Prometheus stays default
+          },
+          {
+            name      = "Loki"
+            type      = "loki"
+            access    = "proxy"
+            url       = "http://loki.${var.namespace}.svc.cluster.local:3100"
+            isDefault = false  # ✅ explicitly not default
+            jsonData = {
+              maxLines = 1000
+            }
           }
-        }
-      ]
+        ]
+      }
+    }
+
     }
   })]
 
