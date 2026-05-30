@@ -7,14 +7,17 @@ resource "helm_release" "loki" {
   create_namespace = true
 
   wait    = true
-  timeout = 600
+  timeout = 1200
+  atomic  = true
+  wait_for_jobs = true
 
   values = [yamlencode({
     loki = {
       enabled = true
       persistence = {
         enabled = true
-        size    = "10Gi"
+        size    = "2Gi"
+        storageClassName = "gp2"
       }
     }
     promtail = {
@@ -32,7 +35,11 @@ resource "helm_release" "kube_prometheus" {
   create_namespace = true
 
   wait    = true
-  timeout = 1200
+  timeout = 1800
+  atomic  = true
+  wait_for_jobs = true
+
+  
 
   values = [yamlencode({
     grafana = {
