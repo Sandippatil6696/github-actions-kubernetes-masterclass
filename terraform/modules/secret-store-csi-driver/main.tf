@@ -20,6 +20,11 @@ resource "helm_release" "csi_secrets_store" {
   value = "true"
 }
 
+set {
+    name  = "tokenRequests[0].audience"
+    value = "sts.amazonaws.com"
+  }
+
 }
 
 resource "helm_release" "secrets_csi_driver_aws_provider" {
