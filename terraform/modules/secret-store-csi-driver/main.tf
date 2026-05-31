@@ -14,6 +14,12 @@ resource "helm_release" "csi_secrets_store" {
     name  = "enableSecretRotation"
     value = "true"
   }
+
+  set {
+  name  = "rbac.install"
+  value = "true"
+}
+
 }
 
 resource "helm_release" "secrets_csi_driver_aws_provider" {
