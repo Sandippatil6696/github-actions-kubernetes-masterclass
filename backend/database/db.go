@@ -22,7 +22,7 @@ func Connect() {
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?parseTime=true", user, password, host, port, dbname)
 
 	var err error
-	for i := 0; i < 31; i++ {
+	for i := 0; i < 30; i++ {
 		DB, err = sql.Open("mysql", dsn)
 		if err == nil {
 			err = DB.Ping()
