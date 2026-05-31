@@ -29,6 +29,12 @@ resource "helm_release" "secrets_csi_driver_aws_provider" {
   chart      = "secrets-store-csi-driver-provider-aws"
   namespace  = "kube-system"
 
+  set {
+    name  = "secrets-store-csi-driver.install"
+    value = "false"
+  }
+
+
   depends_on = [
     helm_release.csi_secrets_store
   ]  
