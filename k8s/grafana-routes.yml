@@ -7,7 +7,7 @@ metadata:
   namespace: monitoring
 spec:
   hostnames:
-    - grafana.52.88.58.75.nip.io
+    - grafana.50.112.40.150.nip.io
   parentRefs:
     - group: gateway.networking.k8s.io
       kind: Gateway
