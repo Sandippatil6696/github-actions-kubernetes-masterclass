@@ -80,4 +80,5 @@ module "secret_store_csi_driver" {
   source = "./modules/secret-store-csi-driver"
   namespace = var.namespace
   oidc_provider = module.eks.oidc_provider
+  environment = local.env
 }

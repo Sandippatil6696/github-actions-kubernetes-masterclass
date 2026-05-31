@@ -42,7 +42,7 @@ resource "helm_release" "secrets_csi_driver_aws_provider" {
 }
 
 resource "aws_iam_policy" "myapp_secrets_policy" {
-  name = "${terraform.workspace}-myapp-secrets"
+  name = "${var.environment}-myapp-secrets"
 
   policy = jsonencode({
     Version = "2012-10-17"
@@ -66,7 +66,7 @@ module "secrets_irsa_role" {
 
   create_role = true
 
-  role_name = "secrets-role"
+  role_name = "${var.environment}-secrets-role"
 
   provider_url = var.oidc_provider
 
