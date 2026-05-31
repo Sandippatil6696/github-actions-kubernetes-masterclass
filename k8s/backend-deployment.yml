@@ -6,11 +6,11 @@ metadata:
   namespace: skillpulse
 spec:
   replicas: 2
-  strategy:
-    type: RollingUpdate
-    rollingUpdate:
-      maxUnavailable: 0   # always keep 2 pods healthy during rollout
-      maxSurge: 1
+  # strategy:
+  #   type: RollingUpdate
+  #   rollingUpdate:
+  #     maxUnavailable: 0   # always keep 2 pods healthy during rollout
+  #     maxSurge: 1
   selector:
     matchLabels:
       app: backend
@@ -33,11 +33,11 @@ spec:
               cpu: "100m"
       containers:
         - name: backend
-          image: sandippatil6696/skillpulse-backend:21fb201
-          lifecycle:
-            preStop:
-              exec:
-                command: ["/bin/sh", "-c", "sleep 10"]
+          image: sandippatil6696/skillpulse-backend:7ed07fa
+          # lifecycle:
+          #   preStop:
+          #     exec:
+          #       command: ["/bin/sh", "-c", "sleep 10"]
           imagePullPolicy: Always
           ports:
             - name: http
@@ -64,6 +64,10 @@ spec:
                 secretKeyRef:
                   name: skillpulse-db
                   key: MYSQL_DATABASE
+          volumeMounts:
+            - name: secrets-store
+              mountPath: /mnt/secrets-store
+              readOnly: true
           resources:
             requests:
               cpu: 250m
@@ -93,3 +97,10 @@ spec:
             periodSeconds: 5
             timeoutSeconds: 3       
             failureThreshold: 3
+      volumes:
+        - name: secrets-store
+          csi:
+            driver: secrets-store.csi.k8s.io
+            readOnly: true
+            volumeAttributes:
+              secretProviderClass: aws-secrets
