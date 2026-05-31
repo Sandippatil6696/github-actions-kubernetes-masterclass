@@ -7,7 +7,7 @@ metadata:
   namespace: argocd
 spec:
   hostnames:
-    - argocd.52.33.255.7.nip.io
+    - argocd.54.68.100.67.nip.io
   parentRefs:
     - group: gateway.networking.k8s.io
       kind: Gateway
