@@ -33,15 +33,7 @@ spec:
               cpu: "100m"
       containers:
         - name: backend
-<<<<<<< HEAD
-          image: sandippatil6696/skillpulse-backend:580a0e0
-          lifecycle:
-            preStop:
-              exec:
-                command: ["/bin/sh", "-c", "sleep 10"]
-=======
           image: sandippatil6696/skillpulse-backend:942c3f8
->>>>>>> d1d6e437e50341694e66db2dba03eee627325ad3
           imagePullPolicy: Always
           lifecycle:
             preStop:
