@@ -19,6 +19,7 @@ spec:
       labels:
         app: backend
     spec:
+      serviceAccountName: secrets-sa
       terminationGracePeriodSeconds: 40
       initContainers:
         - name: wait-for-mysql
