@@ -6,11 +6,11 @@ metadata:
   namespace: skillpulse
 spec:
   replicas: 2
-  # strategy:
-  #   type: RollingUpdate
-  #   rollingUpdate:
-  #     maxUnavailable: 0   # always keep 2 pods healthy during rollout
-  #     maxSurge: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0   # always keep 2 pods healthy during rollout
+      maxSurge: 1
   selector:
     matchLabels:
       app: backend
@@ -33,11 +33,11 @@ spec:
               cpu: "100m"
       containers:
         - name: backend
-          image: sandippatil6696/skillpulse-backend:7ed07fa
-          # lifecycle:
-          #   preStop:
-          #     exec:
-          #       command: ["/bin/sh", "-c", "sleep 10"]
+          image: sandippatil6696/skillpulse-backend:580a0e0
+          lifecycle:
+            preStop:
+              exec:
+                command: ["/bin/sh", "-c", "sleep 10"]
           imagePullPolicy: Always
           ports:
             - name: http
