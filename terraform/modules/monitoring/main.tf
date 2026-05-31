@@ -46,6 +46,11 @@ resource "helm_release" "kube_prometheus" {
       service = {
         type = "ClusterIP" # same as --set grafana.service.type=LoadBalancer
       }
+      sidecar = {
+      datasources = {
+        defaultDatasourceEnabled = true
+      }
+    }
       additionalDataSources = [
         {
           name   = "Loki"
