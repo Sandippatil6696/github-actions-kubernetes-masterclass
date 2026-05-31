@@ -33,12 +33,12 @@ spec:
               cpu: "100m"
       containers:
         - name: backend
-          image: sandippatil6696/skillpulse-backend:7ed07fa
+          image: sandippatil6696/skillpulse-backend:942c3f8
+          imagePullPolicy: Always
           lifecycle:
             preStop:
               exec:
                 command: ["/bin/sh", "-c", "sleep 10"]
-          imagePullPolicy: Always
           ports:
             - name: http
               containerPort: 8080
