@@ -34,13 +34,13 @@ spec:
       containers:
         - name: backend
 <<<<<<< HEAD
-          image: sandippatil6696/skillpulse-backend:7ed07fa
+          image: sandippatil6696/skillpulse-backend:942c3f8
           lifecycle:
             preStop:
               exec:
                 command: ["/bin/sh", "-c", "sleep 10"]
 =======
-          image: sandippatil6696/skillpulse-backend:580a0e0
+          image: sandippatil6696/skillpulse-backend:942c3f8
           # lifecycle:
           #   preStop:
           #     exec:
