@@ -20,7 +20,7 @@
 #   value = "true"
 # }
 
-}
+#}
 
 resource "helm_release" "secrets_csi_driver_aws_provider" {
   name = "secrets-store-csi-driver-provider-aws"
