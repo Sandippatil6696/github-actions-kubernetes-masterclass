@@ -34,7 +34,7 @@ spec:
               cpu: "100m"
       containers:
         - name: backend
-          image: sandippatil6696/skillpulse-backend:aac5404
+          image: sandippatil6696/skillpulse-backend:1f6d010
           lifecycle:
             preStop:
               exec:
