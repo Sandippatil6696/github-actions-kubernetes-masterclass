@@ -9,6 +9,7 @@ module "eks" {
   endpoint_private_access = true
 
   enable_cluster_creator_admin_permissions = true
+  enable_irsa                              = true
 
   addons = {
     coredns = {

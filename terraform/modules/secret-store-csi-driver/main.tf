@@ -1,24 +1,24 @@
-resource "helm_release" "csi_secrets_store" {
+# resource "helm_release" "csi_secrets_store" {
   
-  name = "secrets-store-csi-driver"
-  repository = "https://kubernetes-sigs.github.io/secrets-store-csi-driver/charts"
-  chart = "secrets-store-csi-driver"
-  namespace        = "kube-system"
+#   name = "secrets-store-csi-driver"
+#   repository = "https://kubernetes-sigs.github.io/secrets-store-csi-driver/charts"
+#   chart = "secrets-store-csi-driver"
+#   namespace        = "kube-system"
   
-  set {
-    name  = "syncSecret.enabled"
-    value = "true"
-  }
+#   set {
+#     name  = "syncSecret.enabled"
+#     value = "true"
+#   }
 
-  set {
-    name  = "enableSecretRotation"
-    value = "true"
-  }
+#   set {
+#     name  = "enableSecretRotation"
+#     value = "true"
+#   }
 
-  set {
-  name  = "rbac.install"
-  value = "true"
-}
+#   set {
+#   name  = "rbac.install"
+#   value = "true"
+# }
 
 }
 
@@ -31,13 +31,22 @@ resource "helm_release" "secrets_csi_driver_aws_provider" {
 
   set {
     name  = "secrets-store-csi-driver.install"
-    value = "false"
+    value = "true"
   }
 
+   set {
+    name  = "syncSecret.enabled"
+    value = "true"
+  }
 
-  depends_on = [
-    helm_release.csi_secrets_store
-  ]  
+  set {
+    name  = "enableSecretRotation"
+    value = "true"
+  }
+
+  # depends_on = [
+  #   helm_release.csi_secrets_store
+  # ]  
 }
 
 resource "aws_iam_policy" "myapp_secrets_policy" {
